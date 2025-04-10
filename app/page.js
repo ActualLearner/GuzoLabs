@@ -100,13 +100,13 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-gray-900 dark:via-blue-950 dark:to-black font-[family-name:var(--font-geist-sans)] pb-24">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 font-[family-name:var(--font-geist-sans)] pb-24">
       {/* Header Section */}
       <header className="p-6 sm:p-8 mb-6 text-center sm:text-left">
-        <h1 className="text-3xl font-extrabold text-blue-900 dark:text-white tracking-tight">
+        <h1 className="text-3xl font-extrabold text-blue-900 tracking-tight">
           Loyalty Missions
         </h1>
-        <p className="mt-1 text-md text-blue-700 dark:text-blue-300">
+        <p className="mt-1 text-md text-blue-700">
           Complete missions, earn points, track progress!
         </p>
       </header>
@@ -120,10 +120,10 @@ export default function Page() {
           {/* Current Missions Section */}
           <section className="mb-10">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold text-blue-800 dark:text-blue-100">
+              <h2 className="text-lg font-semibold text-blue-800">
                 Current Missions ({currentTasks.length})
               </h2>
-              <a href="#" className="text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+              <a href="#" className="text-sm font-medium text-blue-600 hover:text-blue-800">
                 History
               </a>
             </div>
@@ -131,7 +131,7 @@ export default function Page() {
               {currentTasks.length > 0 ? (
                 currentTasks.map((task) => <TaskCard key={task.id} task={task} />)
               ) : (
-                <p className="text-gray-500 dark:text-gray-400 text-sm col-span-1 sm:col-span-2 text-center py-4">
+                <p className="text-gray-500 text-sm col-span-1 sm:col-span-2 text-center py-4">
                   No active missions right now.
                 </p>
               )}
@@ -141,7 +141,7 @@ export default function Page() {
           {/* Join Missions Section */}
           <section className="mb-10">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold text-blue-800 dark:text-blue-100">
+              <h2 className="text-lg font-semibold text-blue-800">
                 Join Missions
               </h2>
             </div>
@@ -151,7 +151,7 @@ export default function Page() {
                   <TaskCard key={task.id} task={task} onJoinMission={handleJoinMission} />
                 ))
               ) : (
-                <p className="text-gray-500 dark:text-gray-400 text-sm col-span-1 sm:col-span-2 text-center py-4">
+                <p className="text-gray-500 text-sm col-span-1 sm:col-span-2 text-center py-4">
                   No new missions to join.
                 </p>
               )}
@@ -161,7 +161,7 @@ export default function Page() {
       </main>
 
       {/* Footer Section */}
-      <footer className="mt-16 text-center text-sm text-blue-600 dark:text-blue-400">
+      <footer className="mt-16 text-center text-sm text-blue-600">
         <p>© {new Date().getFullYear()} Your Company Name</p>
       </footer>
     </div>

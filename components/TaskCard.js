@@ -36,22 +36,22 @@ function TaskCard({ task, onJoinMission }) { // Added onJoinMission prop placeho
 
   return (
     // Base card: White background, rounded, shadow, padding, flex column structure
-    <div className="bg-white dark:bg-gray-800/70 rounded-xl p-4 shadow-md border border-gray-200 dark:border-gray-700/30 flex flex-col justify-between min-h-[190px] sm:min-h-[200px]">
+    <div className="bg-white rounded-xl p-4 shadow-md border border-gray-200 flex flex-col justify-between min-h-[190px] sm:min-h-[200px]">
       {/* Top Content Area */}
       <div>
         {/* Points Badge - Blue theme */}
-        <span className="bg-blue-100 text-blue-700 dark:bg-blue-800/50 dark:text-blue-200 text-xs font-semibold px-2.5 py-1 rounded-md inline-block mb-2">
+        <span className="bg-blue-100 text-blue-700 text-xs font-semibold px-2.5 py-1 rounded-md inline-block mb-2">
           {formatPoints(task.points)}
         </span>
 
         {/* Title */}
-        <h3 className="text-sm sm:text-base font-semibold text-gray-800 dark:text-white mb-1 truncate">
+        <h3 className="text-sm sm:text-base font-semibold text-gray-800 mb-1 truncate">
           {task.title}
         </h3>
 
         {/* Description (shown for not-started, completed, redeemed for context) */}
         {(isJoinable || isCompleted || isRedeemed) && task.description && (
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 line-clamp-2">
+          <p className="text-xs text-gray-500 mb-3 line-clamp-2">
             {task.description}
           </p>
         )}
@@ -61,7 +61,7 @@ function TaskCard({ task, onJoinMission }) { // Added onJoinMission prop placeho
           <div className="mt-2 mb-1">
             <div className="flex items-center justify-between gap-2">
               {/* Progress Bar Track */}
-              <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 overflow-hidden">
+              <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                 {/* Progress Bar Fill - Blue */}
                 <div
                   className="bg-blue-500 h-full rounded-full transition-all duration-300 ease-out"
@@ -69,7 +69,7 @@ function TaskCard({ task, onJoinMission }) { // Added onJoinMission prop placeho
                 />
               </div>
               {/* Progress Text */}
-              <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">
+              <span className="text-[10px] sm:text-xs text-gray-500 flex-shrink-0">
                 {progressText}
               </span>
             </div>
@@ -82,7 +82,7 @@ function TaskCard({ task, onJoinMission }) { // Added onJoinMission prop placeho
 
          {/* Timestamp/Status Text (for Current tasks) */}
          {(isInProgress || isCompleted || isRedeemed) && task.completedDate && (
-          <p className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 mb-2 text-center sm:text-left"> {/* Centered on small screens */}
+          <p className="text-[10px] sm:text-xs text-gray-400 mb-2 text-center sm:text-left"> {/* Centered on small screens */}
             {task.completedDate}
           </p>
         )}
@@ -91,7 +91,7 @@ function TaskCard({ task, onJoinMission }) { // Added onJoinMission prop placeho
         {isJoinable && (
           <button
             onClick={handleJoinClick}
-            className="w-full border border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-300 bg-white dark:bg-transparent hover:bg-blue-50 dark:hover:bg-blue-900/30 py-1.5 sm:py-2 px-4 rounded-full text-xs sm:text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1 dark:focus:ring-offset-gray-800"
+            className="w-full border border-blue-500 text-blue-600 bg-white hover:bg-blue-50 py-1.5 sm:py-2 px-4 rounded-full text-xs sm:text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1"
           >
             Join Mission
           </button>
@@ -100,7 +100,7 @@ function TaskCard({ task, onJoinMission }) { // Added onJoinMission prop placeho
         {isCompleted && (
           <button
             onClick={handleRedeemClick}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-1.5 sm:py-2 px-4 rounded-full text-xs sm:text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:focus:ring-offset-gray-800"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-1.5 sm:py-2 px-4 rounded-full text-xs sm:text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
           >
             Redeem Reward
           </button>
@@ -108,7 +108,7 @@ function TaskCard({ task, onJoinMission }) { // Added onJoinMission prop placeho
 
         {isRedeemed && (
            <button
-            className="w-full bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 py-1.5 sm:py-2 px-4 rounded-full text-xs sm:text-sm font-medium cursor-not-allowed"
+            className="w-full bg-gray-300 text-gray-500 py-1.5 sm:py-2 px-4 rounded-full text-xs sm:text-sm font-medium cursor-not-allowed"
             disabled
           >
             Redeemed
