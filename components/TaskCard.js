@@ -36,7 +36,7 @@ function TaskCard({ task, onJoinMission }) { // Added onJoinMission prop placeho
 
   return (
     // Base card: White background, rounded, shadow, padding, flex column structure
-    <div className="bg-white rounded-xl p-4 shadow-md border border-gray-200 flex flex-col justify-between min-h-[190px] sm:min-h-[200px]">
+    <div className="bg-white rounded-xl p-4 shadow-md border border-gray-200 flex flex-col justify-between min-h-[180px] sm:min-h-[180px]">
       {/* Top Content Area */}
       <div>
         {/* Points Badge - Blue theme */}
@@ -58,7 +58,7 @@ function TaskCard({ task, onJoinMission }) { // Added onJoinMission prop placeho
 
         {/* Progress Bar & Text (Only for In-Progress) */}
         {isInProgress && (
-          <div className="mt-2 mb-1">
+          <div className="mt-2">
             <div className="flex items-center justify-between gap-2">
               {/* Progress Bar Track */}
               <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
@@ -78,7 +78,7 @@ function TaskCard({ task, onJoinMission }) { // Added onJoinMission prop placeho
       </div>
 
       {/* --- Bottom Section (Timestamp & Button) --- */}
-      <div className="mt-auto pt-2"> {/* Pushes content below to the bottom */}
+      <div className="mt-1"> {/* Pushes content below to the bottom */}
 
          {/* Timestamp/Status Text (for Current tasks) */}
          {(isInProgress || isCompleted || isRedeemed) && task.completedDate && (
