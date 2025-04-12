@@ -14,7 +14,7 @@ const membershipPlans = [
     id: 'standard', // Matches 'Standard' from mock data (via lowercase comparison)
     level: 1,
     name: 'Standard', // Changed name to match mock data
-    priceYearly: '$199',
+    priceYearly: '199 birr',
     description: 'Begin your journey with exclusive member rates.',
     features: [
       'Member-only room rates (up to 10% off)',
@@ -30,7 +30,7 @@ const membershipPlans = [
     id: 'premium', // Matches 'Premium' from mock data
     level: 2,
     name: 'Premium', // Changed name to match mock data
-    priceYearly: '$499',
+    priceYearly: '499 birr',
     description: 'Enhanced comfort and rewarding stays.',
     features: [
       'Enhanced room rates (up to 15% off)',
@@ -45,7 +45,7 @@ const membershipPlans = [
     id: 'lifetime', // Matches 'Lifetime' from mock data
     level: 3,
     name: 'Lifetime', // Changed name to match mock data
-    priceYearly: '$999', // Example price, could be one-time or different model
+    priceYearly: '999 birr', // Example price, could be one-time or different model
     description: 'Experience the best with premium perks for life.',
     features: [
       'Preferred room rates (up to 20% off)',
@@ -60,7 +60,7 @@ const membershipPlans = [
     id: 'elite', // Corresponds to packageType 'Elite' - add if needed as a separate tier
     level: 4,
     name: 'Elite Circle', // Example Name
-    priceYearly: '$2499',
+    priceYearly: '2499 birr',
     description: 'Unparalleled service & exclusive access.',
     features: [
       'Best available room rates (up to 25% off)',
