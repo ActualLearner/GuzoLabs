@@ -22,6 +22,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=YOUR_ZENDESK_KEY"> </script>
         {children}
       </body>
     </html>

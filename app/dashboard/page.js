@@ -4,96 +4,118 @@
 import React, { useState } from 'react';
 import AppLayout from '../../components/AppLayout'; // Adjust path
 import { useRouter } from 'next/navigation';
-import { FaEnvelope, FaBell, FaSignOutAlt, FaLock, FaUserEdit, FaTags, FaShoppingCart, FaTools, FaCalendarAlt, FaUtensils } from 'react-icons/fa'; // Added more specific icons
+// Added FaQrcode and FaIdCard icons
+import {
+    FaEnvelope, FaBell, FaSignOutAlt, FaLock, FaUserEdit, FaTags, FaShoppingCart,
+    FaTools, FaCalendarAlt, FaUtensils, FaQrcode, FaIdCard, FaStar, FaGem // Added FaStar, FaGem
+} from 'react-icons/fa';
 import { mockCurrentUser } from '@/lib/mockData'; // Adjust path
 
-// Helper function to map discount type to an icon
+// Helper function (assuming it exists or copy/paste)
 const getIconForDiscountType = (type) => {
     switch (type?.toLowerCase()) {
         case 'food & beverage': return FaUtensils;
         case 'retail': return FaShoppingCart;
         case 'services': return FaTools;
         case 'events': return FaCalendarAlt;
-        default: return FaTags; // Default tag icon
+        default: return FaTags;
     }
 };
 
 export default function DashboardPage() {
   const router = useRouter();
-  // Use the imported mock user data
   const currentUserData = mockCurrentUser;
 
-  // State for preferences (can still be local if needed)
-  const [emailNotifications, setEmailNotifications] = useState(currentUserData.userInfo.prefs?.emailNotifications ?? true); // Use optional chaining and default
+  // Check if currentUser exists before proceeding
+  if (!currentUserData) {
+    return (
+      <AppLayout>
+        <div className="text-center py-10 text-gray-400">Loading user data...</div>
+      </AppLayout>
+    );
+  }
 
-  // Process benefits from the user data
+  const [emailNotifications, setEmailNotifications] = useState(currentUserData.userInfo.prefs?.emailNotifications ?? true);
+
   const userDiscounts = currentUserData.packageInfo?.discounts || [];
   const userBenefits = userDiscounts.map((discount, index) => ({
-      id: `d-${currentUserData.id}-${index}`, // More unique ID
+      id: `d-${currentUserData.id}-${index}`,
       name: `${discount.discountAmount}% Off ${discount.discountType}`,
       description: `Enjoy a ${discount.discountAmount}% discount on ${discount.discountType}.`,
-      icon: getIconForDiscountType(discount.discountType) // Use helper function
+      icon: getIconForDiscountType(discount.discountType)
   }));
 
-  // --- Handlers remain the same ---
-  const handleLogout = () => { /* ... */ };
-  const handleToggleNotifications = () => { /* ... */ };
+  const handleLogout = () => {
+     console.log("Logging out...");
+     alert("Logout functionality not fully implemented yet.");
+     // router.push('/login');
+   };
+
+  const handleToggleNotifications = () => {
+    const newValue = !emailNotifications;
+    setEmailNotifications(newValue);
+    console.log("Email notifications toggled to:", newValue);
+    // TODO: Save preference change via API
+   };
+
+   // Navigation handler for the QR code button
+   const handleGoToQrCode = () => {
+       router.push('/qr_code'); // Navigate to the QR code page
+   };
 
   return (
-    <AppLayout userData={currentUserData}> {/* Pass data to layout */}
-      <div className="w-full max-w-3xl mx-auto pt-6 pb-12 space-y-8">
+    <AppLayout userData={currentUserData}>
+      {/* Increased max-width for slightly wider dashboard */}
+      <div className="w-full max-w-4xl mx-auto pt-6 pb-12 space-y-8">
 
-        {/* Page Header (remains similar) */}
-        {/* ... */}
+        {/* Page Header */}
+        <div className="px-4 sm:px-0">
+          <h1 className="text-3xl font-bold text-gray-100 tracking-tight mb-2">
+             Welcome, {currentUserData.userInfo.fullName?.split(' ')[0] || 'Member'}! {/* Personalized Greeting */}
+          </h1>
+          <p className="text-md text-gray-400">
+            Here's your dashboard overview. Manage your benefits, settings, and points.
+          </p>
+        </div>
 
-        {/* Membership Benefits Section - Use processed data */}
-        <section className="bg-slate-800 p-6 rounded-lg shadow-lg border border-slate-700/50">
-          <div className="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
-             <h2 className="text-xl font-semibold text-gray-200">Your Membership Benefits</h2>
-             {/* Display membershipType */}
-             {currentUserData.membershipType && (
-                 <span className="text-sm font-bold px-3 py-1 rounded-full bg-cyan-900/70 text-cyan-300 uppercase tracking-wider">
-                    {currentUserData.membershipType} Tier
-                </span>
-             )}
-          </div>
-          {userBenefits.length > 0 ? (
-            <ul className="space-y-4">
-              {userBenefits.map((benefit) => ( // Use the processed userBenefits array
-                <li key={benefit.id} className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-slate-700 mt-1">
-                     <benefit.icon className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
-                  </div>
+        {/* Quick Stats (Optional Improvement - similar to home) */}
+        <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="bg-slate-800 p-4 rounded-lg shadow-md border border-slate-700/50 flex items-center gap-3">
+                 <FaGem className="w-6 h-6 text-cyan-400 flex-shrink-0" />
+                 <div>
+                    <div className="text-sm text-gray-400">Points Balance</div>
+                    <div className="text-xl font-semibold text-white">{currentUserData.points.toLocaleString()}</div>
+                 </div>
+            </div>
+             <div className="bg-slate-800 p-4 rounded-lg shadow-md border border-slate-700/50 flex items-center gap-3">
+                 <FaStar className="w-6 h-6 text-yellow-400 flex-shrink-0" />
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-200">{benefit.name}</h3>
-                    <p className="text-xs text-gray-400">{benefit.description}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          ) : (
-             /* ... no benefits message ... */
-             <p>No benefits found for your current membership.</p>
-          )}
+                    <div className="text-sm text-gray-400">Membership Tier</div>
+                    <div className="text-xl font-semibold text-white">{currentUserData.membershipType}</div>
+                 </div>
+            </div>
         </section>
 
-        {/* Account Information Section - Use data */}
+        {/* Account Information Section - Added Member ID and QR Button */}
         <section className="bg-slate-800 p-6 rounded-lg shadow-lg border border-slate-700/50">
           <h2 className="text-xl font-semibold text-gray-200 mb-4 border-b border-slate-700 pb-2">Account Information</h2>
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 text-sm mb-5"> {/* Added margin-bottom */}
+             {/* Member ID Display */}
+             <div className="flex items-center">
+              <FaIdCard className="w-4 h-4 mr-3 text-slate-400 flex-shrink-0" />
+              <span className="text-slate-400 mr-2 font-medium">Member ID:</span>
+              <span className="text-gray-200 font-mono">{currentUserData.id}</span> {/* Use ID */}
+            </div>
             <div className="flex items-center">
               <FaUserEdit className="w-4 h-4 mr-3 text-slate-400 flex-shrink-0" />
               <span className="text-slate-400 mr-2 font-medium">Name:</span>
-              {/* Use fullName */}
               <span className="text-gray-200">{currentUserData.userInfo.fullName}</span>
             </div>
             <div className="flex items-center">
               <FaEnvelope className="w-4 h-4 mr-3 text-slate-400 flex-shrink-0" />
               <span className="text-slate-400 mr-2 font-medium">Email:</span>
-               {/* Use email */}
               <span className="text-gray-200">{currentUserData.userInfo.email}</span>
             </div>
-             {/* Optionally add subscription dates */}
              <div className="flex items-center">
                 <FaCalendarAlt className="w-4 h-4 mr-3 text-slate-400 flex-shrink-0"/>
                 <span className="text-slate-400 mr-2 font-medium">Member Since:</span>
@@ -105,13 +127,75 @@ export default function DashboardPage() {
                 <span className="text-gray-200">{new Date(currentUserData.userInfo.subscriptionEndDate).toLocaleDateString()}</span>
             </div>
           </div>
+           {/* Added QR Code Button */}
+           <button
+                onClick={handleGoToQrCode}
+                className="w-full flex items-center justify-center gap-2 border border-cyan-600 text-cyan-400 bg-transparent hover:bg-slate-700 py-2 px-4 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-slate-800"
+            >
+             <FaQrcode className="w-4 h-4" />
+             Show Member QR Code
+           </button>
         </section>
 
-        {/* Settings Section (remains similar, uses local state) */}
-        {/* ... */}
+         {/* Membership Benefits Section */}
+        <section className="bg-slate-800 p-6 rounded-lg shadow-lg border border-slate-700/50">
+          <div className="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
+             <h2 className="text-xl font-semibold text-gray-200">Membership Benefits</h2>
+             {currentUserData.membershipType && (
+                 <span className="text-sm font-bold px-3 py-1 rounded-full bg-cyan-900/70 text-cyan-300 uppercase tracking-wider">
+                    {currentUserData.membershipType} Tier
+                </span>
+             )}
+          </div>
+          {userBenefits.length > 0 ? (
+            <ul className="space-y-4">
+              {userBenefits.map((benefit) => (
+                <li key={benefit.id} className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-slate-700 mt-1">
+                     <benefit.icon className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-200">{benefit.name}</h3>
+                    {/* Removed description for brevity unless needed */}
+                    {/* <p className="text-xs text-gray-400">{benefit.description}</p> */}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+             <p className="text-sm text-gray-500 text-center py-3">No specific discounts listed for your package.</p>
+          )}
+        </section>
 
-        {/* Account Actions Section (remains similar) */}
-        {/* ... */}
+
+        {/* Settings Section */}
+        <section className="bg-slate-800 p-6 rounded-lg shadow-lg border border-slate-700/50">
+          <h2 className="text-xl font-semibold text-gray-200 mb-4 border-b border-slate-700 pb-2">Preferences</h2>
+          <div className="space-y-4">
+             {/* Email Notifications Toggle */}
+             <div className="flex items-center justify-between">
+               <label htmlFor="emailNotifications" className="flex items-center text-sm cursor-pointer gap-3">
+                  <FaBell className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                 <span className="text-gray-200">Email Notifications</span>
+               </label>
+               <button id="emailNotifications" role="switch" aria-checked={emailNotifications} onClick={handleToggleNotifications} className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-slate-800 ${emailNotifications ? 'bg-cyan-600' : 'bg-slate-600'}`}> <span className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out ${emailNotifications ? 'translate-x-6' : 'translate-x-1'}`}/> </button>
+             </div>
+             {/* Password Change */}
+             <div className="flex items-center justify-between pt-4 border-t border-slate-700/50">
+                 <div className="flex items-center text-sm gap-3">
+                    <FaLock className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                    <span className="text-gray-200">Password</span>
+                 </div>
+                  <button className="text-sm font-medium text-cyan-400 hover:text-cyan-300 transition-colors"> Change Password </button>
+             </div>
+          </div>
+        </section>
+
+        {/* Account Actions Section */}
+        <section className="bg-slate-800 p-6 rounded-lg shadow-lg border border-slate-700/50">
+           <h2 className="text-xl font-semibold text-gray-200 mb-4 border-b border-slate-700 pb-2">Account Actions</h2>
+           <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 bg-red-800/80 hover:bg-red-700 text-red-100 py-2 px-4 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-slate-800"> <FaSignOutAlt className="w-4 h-4" /> Log Out </button>
+        </section>
 
       </div>
     </AppLayout>
