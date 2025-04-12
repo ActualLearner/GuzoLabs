@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TaskCard from "../../components/TaskCard";
 import Tier from "../../components/Tier";
 import calculateTierInfo from "@/lib/utils/calculateTiers";
@@ -38,7 +38,13 @@ export default function Page() {
     { name: "Platinum", minPoints: 3000, icon: "💎" },
   ]);
 
-  const tierInfo = calculateTierInfo(currentUser.points);
+  useEffect(() => {
+    fetch("http://localhost:5000/api/items")
+      .then(res => res.json())
+      .then(data => setTasks(data));
+  }, []);
+
+  const tierInfo = calculateTierInfo(currentUser.points, tiers);
 
   const currentTasks = tasks.filter(
     (t) => t.status === "in-progress" || t.status === "completed" || t.status === "redeemed"

@@ -1,57 +1,88 @@
-// components/TierProgress.js (or Tier.js - ensure filename matches import)
+// components/TierProgress.js
 import React from 'react';
 
 function TierProgress({ tierData }) {
 
-  // Check if data is provided
+  // Check if data is provided - Skeleton Loader adapted for dark theme
   if (!tierData || !tierData.currentTier) {
     console.warn("TierProgress component received no or invalid tierData prop:", tierData);
-    // --- FIX IS HERE: Put the actual skeleton JSX inside the return() ---
     return (
-      <div className="w-full p-6 border rounded-xl shadow-lg bg-gray-200 mb-8 animate-pulse">
-        <div className="h-5 bg-gray-300 rounded w-3/4 mb-4"></div>
-        <div className="h-3 bg-gray-300 rounded-full w-full mb-3"></div>
-        <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+      // Dark theme skeleton
+      <div className="w-full p-6 border border-slate-700/50 rounded-xl shadow-lg bg-slate-800 mb-8 animate-pulse">
+        <div className="h-5 bg-slate-700 rounded w-3/4 mb-4"></div>
+        <div className="h-3 bg-slate-600 rounded-full w-full mb-3"></div>
+        <div className="h-4 bg-slate-700 rounded w-1/2"></div>
       </div>
     );
-    // --- END FIX ---
   }
 
-  // Destructure the pre-calculated data FROM THE tierData PROP
+  // Destructure the pre-calculated data
   const {
     currentTier,
     nextTier,
-    pointsNeededForNext,
+    pointsNeededForNext, // This seems incorrect based on calculation below, should be nextTier.minPoints?
     progressPercentage,
     isMaxTier,
     totalUserPoints,
   } = tierData;
 
-  const pointsRemaining = nextTier ? nextTier.minPoints - totalUserPoints : 0;
+  // Recalculate pointsRemaining for clarity, ensure nextTier exists
+  const pointsRemaining = !isMaxTier && nextTier ? nextTier.minPoints - totalUserPoints : 0;
+  // Determine denominator for display (using nextTier.minPoints seems more standard)
+  const tierMaxPointsDisplay = !isMaxTier && nextTier ? nextTier.minPoints : totalUserPoints;
 
-  // The rest of your component's return statement for the actual progress bar
+
+  // --- Dark Theme Version ---
   return (
-    <div className="w-full p-6 rounded-xl shadow-lg bg-gradient-to-r from-blue-600 to-blue-800 text-white mb-8 transition-shadow hover:shadow-xl">
+    // Main container: Dark background, subtle border, consistent shadow
+    <div className="w-full p-6 rounded-xl shadow-lg bg-slate-800 border border-slate-700/50 text-gray-100 mb-8 transition-shadow hover:shadow-xl">
+
         {/* Header Part */}
-        <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold tracking-tight">
+        <div className="flex flex-wrap justify-between items-center gap-2 mb-4"> {/* Added flex-wrap and gap */}
+            <h2 className="text-xl font-semibold tracking-tight text-gray-100">
               Your Progress {currentTier.icon}
             </h2>
-            <span className="text-xs font-bold px-3 py-1 rounded-full bg-white/90 text-blue-800 uppercase tracking-wider">
+            {/* Badge: Dark theme */}
+            <span className="text-xs font-bold px-3 py-1 rounded-full bg-cyan-900/70 text-cyan-300 uppercase tracking-wider">
               {currentTier.name} Tier
             </span>
         </div>
+
         {/* Progress Bar Part */}
         <div className="mb-1">
-            <div className="flex justify-between text-sm font-medium text-blue-100 mb-1">
-              <span>{isMaxTier ? `Total Points: ${totalUserPoints}` : `Points to ${nextTier?.name || 'Next Tier'}`}</span>
-              <span>{isMaxTier ? "Max Tier!" : `${totalUserPoints} / ${pointsNeededForNext} pts`}</span>
+            {/* Text above progress bar: Light text */}
+            <div className="flex justify-between text-sm font-medium text-gray-300 mb-1">
+              <span>{isMaxTier ? `Total Points:` : `Points to ${nextTier?.name || 'Next Tier'}`}</span>
+              {/* Display format: current / target */}
+              <span>{isMaxTier ? `${totalUserPoints.toLocaleString()} pts` : `${totalUserPoints.toLocaleString()} / ${tierMaxPointsDisplay.toLocaleString()} pts`}</span>
             </div>
-            <div className="w-full bg-blue-200/30 rounded-full h-2.5 overflow-hidden" role="progressbar" aria-valuenow={progressPercentage} aria-valuemin="0" aria-valuemax="100" aria-label={`Tier progress: ${currentTier.name}`}>
-              <div className="bg-white h-2.5 rounded-full transition-all duration-500 ease-out" style={{ width: `${progressPercentage}%` }} />
+
+            {/* Progress Bar: Dark track, cyan fill */}
+            <div
+                className="w-full bg-slate-600 rounded-full h-2.5 overflow-hidden"
+                role="progressbar"
+                aria-valuenow={progressPercentage}
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-label={`Tier progress: ${currentTier.name}`}
+            >
+              <div
+                className="bg-cyan-500 h-2.5 rounded-full transition-all duration-500 ease-out"
+                style={{ width: `${progressPercentage}%` }}
+               />
             </div>
-            {!isMaxTier && nextTier && pointsRemaining > 0 && (<p className="text-xs text-blue-200 mt-2 text-right">{pointsRemaining} more points for {nextTier.name}</p>)}
-            {isMaxTier && (<p className="text-xs text-white font-medium mt-2 text-right">You've reached the highest tier! ✨</p>)}
+
+            {/* Text below progress bar: Dimmer text */}
+            {!isMaxTier && nextTier && pointsRemaining > 0 && (
+                <p className="text-xs text-gray-400 mt-2 text-right">
+                    {pointsRemaining.toLocaleString()} more points for {nextTier.name}
+                </p>
+            )}
+            {isMaxTier && (
+                <p className="text-xs text-cyan-300 font-medium mt-2 text-right">
+                    You've reached the highest tier! ✨
+                </p>
+            )}
         </div>
     </div>
   );

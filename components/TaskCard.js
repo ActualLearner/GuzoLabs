@@ -1,75 +1,81 @@
 // components/TaskCard.js
 import React from 'react';
-// Optional: Import icons later if needed e.g. CheckCircleIcon, GiftIcon
+import { FaCheckCircle } from 'react-icons/fa'; // Example icon for redeemed
 
-// Helper to format points
-const formatPoints = (points) => `+${points} pts`; // Changed format slightly
+// Helper to format points - consistent with previous usage
+const formatPoints = (points) => `+${points} pts`;
 
-function TaskCard({ task, onJoinMission }) { // Added onJoinMission prop placeholder
+export default function TaskCard({ task, onJoinMission }) {
+  // Status flags remain the same
   const isJoinable = task.status === 'not-started';
   const isInProgress = task.status === 'in-progress';
   const isCompleted = task.status === 'completed';
   const isRedeemed = task.status === 'redeemed';
 
+  // Progress calculation remains the same
   const progressPercentage = (isInProgress && task.maxProgress > 0)
     ? (task.progress / task.maxProgress) * 100
     : 0;
 
   const progressText = isInProgress ? `${task.progress} of ${task.maxProgress}` : '';
 
-  // Basic click handler simulation for Join Mission
+  // Click handlers remain the same
   const handleJoinClick = () => {
     if (onJoinMission) {
-      onJoinMission(task.id); // Pass task ID to parent handler
+      onJoinMission(task.id);
     } else {
-      // Demo behavior if no handler passed
-      console.log(`Simulating joining mission: ${task.title} (ID: ${task.id})`);
-      alert(`Joining "${task.title}"! (In a real app, this would update state)`);
+      console.warn(`No onJoinMission handler provided for task: ${task.title}`);
     }
   };
-   // Placeholder handlers for other actions
-   const handleRedeemClick = () => {
+
+  const handleRedeemClick = () => {
+    // In a real app, this would likely trigger an API call and update task state
     console.log(`Simulating redeeming reward for: ${task.title} (ID: ${task.id})`);
     alert(`Redeeming reward for "${task.title}"!`);
+    // Potentially update task state here to 'redeemed' visually, though backend should confirm
   };
 
 
   return (
-    // Base card: White background, rounded, shadow, padding, flex column structure
-    <div className="bg-white rounded-xl p-4 shadow-md border border-gray-200 flex flex-col justify-between min-h-[180px] sm:min-h-[180px]">
-      {/* Top Content Area */}
-      <div>
-        {/* Points Badge - Blue theme */}
-        <span className="bg-blue-100 text-blue-700 text-xs font-semibold px-2.5 py-1 rounded-md inline-block mb-2">
+    // Base card: Dark background, rounded, subtle shadow/border, padding, flex column
+    <div className="bg-slate-800 rounded-lg p-4 shadow-lg border border-slate-700/50 flex flex-col justify-between min-h-[180px]">
+
+      {/* Top Content Area - Takes available space */}
+      <div className="flex-grow">
+        {/* Points Badge - Dark theme with Cyan accent */}
+        <span className="bg-cyan-900/70 text-cyan-300 text-xs font-semibold px-2.5 py-1 rounded-md inline-block mb-3">
           {formatPoints(task.points)}
         </span>
 
-        {/* Title */}
-        <h3 className="text-sm sm:text-base font-semibold text-gray-800 mb-1 truncate">
+        {/* Title - Light text */}
+        <h3 className="text-base font-semibold text-gray-100 mb-1 truncate">
           {task.title}
         </h3>
 
-        {/* Description (shown for not-started, completed, redeemed for context) */}
+        {/* Description - Dimmer text */}
         {(isJoinable || isCompleted || isRedeemed) && task.description && (
-          <p className="text-xs text-gray-500 mb-3 line-clamp-2">
+          <p className="text-xs text-gray-400 mb-3 line-clamp-2">
             {task.description}
           </p>
         )}
 
-        {/* Progress Bar & Text (Only for In-Progress) */}
+        {/* Progress Bar & Text (Only for In-Progress) - Dark theme */}
         {isInProgress && (
-          <div className="mt-2">
+          <div className="mt-2 mb-3"> {/* Added margin-bottom */}
             <div className="flex items-center justify-between gap-2">
-              {/* Progress Bar Track */}
-              <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                {/* Progress Bar Fill - Blue */}
+              {/* Progress Bar Track - Darker gray */}
+              <div className="w-full bg-slate-600 rounded-full h-2 overflow-hidden">
+                {/* Progress Bar Fill - Cyan */}
                 <div
-                  className="bg-blue-500 h-full rounded-full transition-all duration-300 ease-out"
+                  className="bg-cyan-500 h-full rounded-full transition-all duration-300 ease-out"
                   style={{ width: `${progressPercentage}%` }}
+                  aria-valuenow={progressPercentage}
+                  aria-valuemin="0"
+                  aria-valuemax="100"
                 />
               </div>
-              {/* Progress Text */}
-              <span className="text-[10px] sm:text-xs text-gray-500 flex-shrink-0">
+              {/* Progress Text - Dimmer text */}
+              <span className="text-[11px] text-gray-400 flex-shrink-0">
                 {progressText}
               </span>
             </div>
@@ -78,20 +84,20 @@ function TaskCard({ task, onJoinMission }) { // Added onJoinMission prop placeho
       </div>
 
       {/* --- Bottom Section (Timestamp & Button) --- */}
-      <div className="mt-1"> {/* Pushes content below to the bottom */}
+      <div className="mt-auto"> {/* Ensures this stays at the bottom */}
 
-         {/* Timestamp/Status Text (for Current tasks) */}
+         {/* Timestamp/Status Text - Dimmest text */}
          {(isInProgress || isCompleted || isRedeemed) && task.completedDate && (
-          <p className="text-[10px] sm:text-xs text-gray-400 mb-2 text-center sm:text-left"> {/* Centered on small screens */}
+          <p className="text-[11px] text-slate-500 mb-2 text-center sm:text-left">
             {task.completedDate}
           </p>
         )}
 
-        {/* Conditional Action Buttons */}
+        {/* Conditional Action Buttons - Dark theme styles */}
         {isJoinable && (
           <button
             onClick={handleJoinClick}
-            className="w-full border border-blue-500 text-blue-600 bg-white hover:bg-blue-50 py-1.5 sm:py-2 px-4 rounded-full text-xs sm:text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1"
+            className="w-full border border-cyan-600 text-cyan-400 bg-transparent hover:bg-slate-700 py-1.5 px-4 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-slate-800"
           >
             Join Mission
           </button>
@@ -100,17 +106,19 @@ function TaskCard({ task, onJoinMission }) { // Added onJoinMission prop placeho
         {isCompleted && (
           <button
             onClick={handleRedeemClick}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-1.5 sm:py-2 px-4 rounded-full text-xs sm:text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+            // Solid cyan button, consider text color based on contrast
+            className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-1.5 px-4 rounded-full text-sm font-medium transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-slate-800"
           >
-            Redeem Reward
+            Redeem Reward {/* You might want a Gift icon here later */}
           </button>
         )}
 
         {isRedeemed && (
            <button
-            className="w-full bg-gray-300 text-gray-500 py-1.5 sm:py-2 px-4 rounded-full text-xs sm:text-sm font-medium cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 bg-slate-700 text-slate-400 py-1.5 px-4 rounded-full text-sm font-medium cursor-not-allowed"
             disabled
           >
+            <FaCheckCircle className="w-4 h-4" /> {/* Added icon */}
             Redeemed
           </button>
         )}
@@ -118,5 +126,3 @@ function TaskCard({ task, onJoinMission }) { // Added onJoinMission prop placeho
     </div>
   );
 }
-
-export default TaskCard;
