@@ -1,11 +1,11 @@
-// components/TierProgress.js
+// components/Tier.js
 import React from 'react';
 
-function TierProgress({ tierData }) {
+function Tier({ tierData }) {
 
   // Check if data is provided - Skeleton Loader adapted for dark theme
   if (!tierData || !tierData.currentTier) {
-    console.warn("TierProgress component received no or invalid tierData prop:", tierData);
+    console.warn("Tier component received no or invalid tierData prop:", tierData);
     return (
       // Dark theme skeleton
       <div className="w-full p-6 border border-slate-700/50 rounded-xl shadow-lg bg-slate-800 mb-8 animate-pulse">
@@ -88,4 +88,4 @@ function TierProgress({ tierData }) {
   );
 }
 
-export default TierProgress;
+export default Tier;
