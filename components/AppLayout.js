@@ -7,11 +7,9 @@ import Header from './Header'; // Import the Header component
 // Define navigation items once, can be passed down or imported
 const navItems = [
     { name: 'Home', href: '/' },
-    { name: 'Reward', href: '/reward' },
+    { name: 'Memberships', href: '/memberships' },
     { name: 'Earn', href: '/earn' },
     { name: 'Withdraw', href: '/withdraw' },
-    { name: 'Quests', href: '/quests' },
-    { name: 'Free', href: '/free' },
     { name: 'QrCode', href: '/qr_code' },
   ];
 

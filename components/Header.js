@@ -6,10 +6,10 @@ import React from 'react';
 import Link from 'next/link'; // Import Link
 import { FaGem, FaBell, FaUserCircle } from 'react-icons/fa';
 
-// Default user data if none is provided
+// Default user data if none is provided - username is less relevant here now
 const defaultUserData = {
   points: 0,
-  username: 'User'
+  // username: 'User' // This default is no longer displayed directly
 };
 
 // Add scrollbar-hide plugin if needed: npm install -D tailwind-scrollbar-hide
@@ -53,6 +53,7 @@ export default function Header({ navItems, userData = defaultUserData, currentPa
           {/* Points */}
           <div className="flex items-center space-x-1 text-sm">
             <FaGem className="text-cyan-400 h-4 w-4" />
+            {/* Points still use userData if provided */}
             <span>{userData?.points?.toLocaleString() || '0'}</span>
           </div>
 
@@ -65,15 +66,18 @@ export default function Header({ navItems, userData = defaultUserData, currentPa
             {/* Add notification indicator logic here */}
           </button>
 
-          {/* User Avatar & Name - Changed to Link */}
+          {/* User Icon & Dashboard Link */}
           <Link
-            href="/dashboard" // Link to the Dashboard page
+            href="/dashboard" // Link remains the same
             aria-label="View User Dashboard"
             // Apply the same styling as the previous button for consistency
             className="flex items-center space-x-2 text-sm text-gray-300 hover:text-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-800 rounded-md px-1 py-1" // Added focus styles and padding
           >
-            <FaUserCircle className="h-6 w-6 flex-shrink-0" /> {/* Added flex-shrink-0 */}
-            <span className="hidden sm:inline">{userData?.username || 'User'}</span>
+            <FaUserCircle className="h-6 w-6 flex-shrink-0" />
+            {/* --- CHANGE IS HERE --- */}
+            {/* Replace dynamic username with static text "Dashboard" */}
+            <span className="hidden sm:inline">Dashboard</span>
+            {/* --- END CHANGE --- */}
           </Link>
         </div>
       </nav>
