@@ -82,7 +82,7 @@ export default function DashboardPage() {
           </h1>
           {/* --- FIX 2: Corrected apostrophe --- */}
           <p className="text-md text-gray-400">
-            Here's your dashboard overview. Manage your benefits, settings, and points.
+            Heres your dashboard overview. Manage your benefits, settings, and points.
           </p>
           {/* --- END FIX 2 --- */}
         </div>

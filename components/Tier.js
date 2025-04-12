@@ -81,7 +81,7 @@ function Tier({ tierData }) { // Make sure filename matches if it's TierProgress
             {isMaxTier && (
                 // --- THIS IS THE CORRECTED LINE ---
                 <p className="text-xs text-cyan-300 font-medium mt-2 text-right">
-                    You've reached the highest tier! ✨
+                    You have reached the highest tier! ✨
                 </p>
                 // --- END CORRECTION ---
             )}
