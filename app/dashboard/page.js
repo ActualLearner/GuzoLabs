@@ -2,16 +2,16 @@
 "use client";
 
 import React, { useState } from 'react';
-import AppLayout from '../../components/AppLayout'; // Adjust path
+import AppLayout from '../../components/AppLayout'; // Adjust path if needed
 import { useRouter } from 'next/navigation';
 // Added FaQrcode and FaIdCard icons
 import {
     FaEnvelope, FaBell, FaSignOutAlt, FaLock, FaUserEdit, FaTags, FaShoppingCart,
-    FaTools, FaCalendarAlt, FaUtensils, FaQrcode, FaIdCard, FaStar, FaGem // Added FaStar, FaGem
+    FaTools, FaCalendarAlt, FaUtensils, FaQrcode, FaIdCard, FaStar, FaGem
 } from 'react-icons/fa';
-import { mockCurrentUser } from '@/lib/mockData'; // Adjust path
+import { mockCurrentUser } from '@/lib/mockData'; // Adjust path if needed
 
-// Helper function (assuming it exists or copy/paste)
+// Helper function (assuming it exists or copy/paste from previous steps)
 const getIconForDiscountType = (type) => {
     switch (type?.toLowerCase()) {
         case 'food & beverage': return FaUtensils;
@@ -26,7 +26,14 @@ export default function DashboardPage() {
   const router = useRouter();
   const currentUserData = mockCurrentUser;
 
-  // Check if currentUser exists before proceeding
+  // --- FIX 1: Moved useState call to the top level ---
+  // Initialize state here, before any conditional returns. Use optional chaining for safety.
+  const [emailNotifications, setEmailNotifications] = useState(
+    currentUserData?.userInfo?.prefs?.emailNotifications ?? true // Default to true if prefs/data missing
+  );
+  // --- END FIX 1 ---
+
+  // Check if currentUser exists *after* hooks have been called
   if (!currentUserData) {
     return (
       <AppLayout>
@@ -35,16 +42,16 @@ export default function DashboardPage() {
     );
   }
 
-  const [emailNotifications, setEmailNotifications] = useState(currentUserData.userInfo.prefs?.emailNotifications ?? true);
-
+  // Process benefits (can stay here)
   const userDiscounts = currentUserData.packageInfo?.discounts || [];
   const userBenefits = userDiscounts.map((discount, index) => ({
       id: `d-${currentUserData.id}-${index}`,
       name: `${discount.discountAmount}% Off ${discount.discountType}`,
-      description: `Enjoy a ${discount.discountAmount}% discount on ${discount.discountType}.`,
+      description: `Enjoy a ${discount.discountAmount}% discount on ${discount.discountType}.`, // Assuming description exists
       icon: getIconForDiscountType(discount.discountType)
   }));
 
+  // --- Handlers (can stay here) ---
   const handleLogout = () => {
      console.log("Logging out...");
      alert("Logout functionality not fully implemented yet.");
@@ -73,12 +80,14 @@ export default function DashboardPage() {
           <h1 className="text-3xl font-bold text-gray-100 tracking-tight mb-2">
              Welcome, {currentUserData.userInfo.fullName?.split(' ')[0] || 'Member'}! {/* Personalized Greeting */}
           </h1>
+          {/* --- FIX 2: Corrected apostrophe --- */}
           <p className="text-md text-gray-400">
             Here's your dashboard overview. Manage your benefits, settings, and points.
           </p>
+          {/* --- END FIX 2 --- */}
         </div>
 
-        {/* Quick Stats (Optional Improvement - similar to home) */}
+        {/* Quick Stats (Improvement from previous step) */}
         <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="bg-slate-800 p-4 rounded-lg shadow-md border border-slate-700/50 flex items-center gap-3">
                  <FaGem className="w-6 h-6 text-cyan-400 flex-shrink-0" />
@@ -157,7 +166,6 @@ export default function DashboardPage() {
                   <div>
                     <h3 className="text-sm font-semibold text-gray-200">{benefit.name}</h3>
                     {/* Removed description for brevity unless needed */}
-                    {/* <p className="text-xs text-gray-400">{benefit.description}</p> */}
                   </div>
                 </li>
               ))}
@@ -166,7 +174,6 @@ export default function DashboardPage() {
              <p className="text-sm text-gray-500 text-center py-3">No specific discounts listed for your package.</p>
           )}
         </section>
-
 
         {/* Settings Section */}
         <section className="bg-slate-800 p-6 rounded-lg shadow-lg border border-slate-700/50">

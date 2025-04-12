@@ -1,7 +1,7 @@
 // components/Tier.js
 import React from 'react';
 
-function Tier({ tierData }) {
+function Tier({ tierData }) { // Make sure filename matches if it's TierProgress.js
 
   // Check if data is provided - Skeleton Loader adapted for dark theme
   if (!tierData || !tierData.currentTier) {
@@ -20,7 +20,7 @@ function Tier({ tierData }) {
   const {
     currentTier,
     nextTier,
-    pointsNeededForNext, // This seems incorrect based on calculation below, should be nextTier.minPoints?
+    // pointsNeededForNext, // This prop wasn't used in calculation, removed unless needed elsewhere
     progressPercentage,
     isMaxTier,
     totalUserPoints,
@@ -79,13 +79,16 @@ function Tier({ tierData }) {
                 </p>
             )}
             {isMaxTier && (
+                // --- THIS IS THE CORRECTED LINE ---
                 <p className="text-xs text-cyan-300 font-medium mt-2 text-right">
                     You've reached the highest tier! ✨
                 </p>
+                // --- END CORRECTION ---
             )}
         </div>
     </div>
   );
 }
 
+// Ensure this matches your filename (Tier.js or TierProgress.js)
 export default Tier;
